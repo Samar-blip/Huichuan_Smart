@@ -1,0 +1,341 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "WebApplication1",
+    "version": "1.0"
+  },
+  "paths": {
+    "/Auth/GetCaptcha": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "获取图形验证码（登录页调用），返回验证码ID和Base64图片",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Auth/Login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "密码登录（支持用户名或手机号），需先校验图形验证码",
+        "requestBody": {
+          "description": "登录请求体，包含账号、密码、验证码ID和验证码",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordLoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordLoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordLoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Auth/Register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "用户注册",
+        "requestBody": {
+          "description": "注册请求体，包含用户名、密码、确认密码、验证码等",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Auth/ChangePassword": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "修改密码（需登录状态）",
+        "requestBody": {
+          "description": "修改密码请求体，包含旧密码和新密码",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Auth/GetCurrentUser": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "获取当前登录用户信息（验证 Token 有效性）",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Auth/GetUserMenus": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "获取当前登录用户的菜单树（用于前端动态渲染左侧导航）",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/WeatherForecast": {
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "summary": "获取未来5天的天气预报数据",
+        "operationId": "GetWeatherForecast",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ChangePasswordRequest": {
+        "required": [
+          "newPassword",
+          "oldPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "newPassword": {
+            "minLength": 8,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "description": "修改密码请求"
+      },
+      "PasswordLoginRequest": {
+        "required": [
+          "account",
+          "captchaCode",
+          "captchaId",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "account": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "captchaId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "验证码ID（由 /Auth/GetCaptcha 返回）"
+          },
+          "captchaCode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "用户输入的验证码"
+          }
+        },
+        "additionalProperties": false,
+        "description": "密码登录请求"
+      },
+      "RegisterRequest": {
+        "required": [
+          "captchaCode",
+          "captchaId",
+          "confirmPassword",
+          "password",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "userName": {
+            "maxLength": 20,
+            "minLength": 3,
+            "type": "string",
+            "description": "用户名（3-20位，唯一）"
+          },
+          "password": {
+            "minLength": 8,
+            "type": "string",
+            "description": "密码（最少8位）"
+          },
+          "confirmPassword": {
+            "minLength": 1,
+            "type": "string",
+            "description": "确认密码"
+          },
+          "realName": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "description": "真实姓名（可选）",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "pattern": "^1[3-9]\\d{9}$",
+            "type": "string",
+            "description": "手机号（可选，唯一）",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "description": "邮箱（可选）",
+            "format": "email",
+            "nullable": true
+          },
+          "captchaId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "验证码ID（由 /Auth/GetCaptcha 返回）"
+          },
+          "captchaCode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "用户输入的验证码"
+          }
+        },
+        "additionalProperties": false,
+        "description": "用户注册请求"
+      },
+      "WeatherForecast": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "日期",
+            "format": "date"
+          },
+          "temperatureC": {
+            "type": "integer",
+            "description": "摄氏温度",
+            "format": "int32"
+          },
+          "temperatureF": {
+            "type": "integer",
+            "description": "华氏温度",
+            "format": "int32",
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string",
+            "description": "天气摘要（如晴、多云、雨等）",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "天气预报数据模型"
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT Token，格式：Bearer {你的Token}",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

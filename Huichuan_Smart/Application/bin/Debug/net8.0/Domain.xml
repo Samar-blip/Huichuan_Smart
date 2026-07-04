@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Domain</name>
+    </assembly>
+    <members>
+        <member name="T:Domain.Entity.AuditEntity">
+            <summary>
+            审计基类 — 所有实体继承此类即可自动拥有：创建时间、修改时间、创建人、修改人、逻辑删除
+            </summary>
+        </member>
+    </members>
+</doc>
