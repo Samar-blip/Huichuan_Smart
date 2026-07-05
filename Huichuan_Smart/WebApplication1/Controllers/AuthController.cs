@@ -49,15 +49,19 @@ namespace WebApplication1.Controllers
         [HttpPost()]
         public async Task<IActionResult> Login([FromBody] PasswordLoginRequest request)
         {
-            // 1. 验证图形验证码
-            if (!_captchaService.Validate(request.CaptchaId, request.CaptchaCode))
-                return BadRequest(new { message = "验证码错误或已过期" });
-
             var result = await _authService.LoginByPasswordAsync(
-                request.Account, request.Password);
+                request.Account, request.Password, request.CaptchaId, request.CaptchaCode);
 
             if (!result.Success)
-                return Unauthorized(new { message = result.Message });
+            {
+                var response = new {
+                    message = result.Message,
+                    isUserNotFound = result.IsUserNotFound,
+                    needNewCaptcha = result.NeedNewCaptcha,
+                    newCaptchaId = result.NewCaptchaId
+                };
+                return Unauthorized(response);
+            }
 
             return Ok(new
             {
@@ -75,13 +79,10 @@ namespace WebApplication1.Controllers
         [HttpPost()]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            // 验证图形验证码
-            if (!_captchaService.Validate(request.CaptchaId, request.CaptchaCode))
-                return BadRequest(new { message = "验证码错误或已过期" });
-
             var result = await _authService.RegisterAsync(
                 request.UserName, request.Password, request.ConfirmPassword,
-                request.RealName, request.PhoneNumber, request.Email);
+                request.RealName, request.PhoneNumber, request.Email,
+                request.CaptchaId, request.CaptchaCode);
 
             if (!result.Success)
                 return BadRequest(new { message = result.Message });

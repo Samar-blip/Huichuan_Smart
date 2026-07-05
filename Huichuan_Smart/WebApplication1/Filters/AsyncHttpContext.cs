@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace WebApplication1
+namespace WebApplication1.Filters
 {
     /// <summary>
     /// 异步上下文，用于在全局拦截器中获取当前登录用户

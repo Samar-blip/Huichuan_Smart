@@ -6,10 +6,6 @@ namespace Domain.Entity
     [SugarTable("sys_role")]
     public class SysRole : AuditEntity
     {
-        //主键
-        [SugarColumn(ColumnName = "id", IsPrimaryKey = true, IsIdentity = true, ColumnDescription = "主键")]
-        public long Id { get; set; }
-
         //角色名称
         [SugarColumn(ColumnName = "role_name", ColumnDataType = "nvarchar(50)", IsNullable = false, ColumnDescription = "角色名称")]
         public string RoleName { get; set; } = string.Empty;

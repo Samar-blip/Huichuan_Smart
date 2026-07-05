@@ -7,6 +7,10 @@ namespace Domain.Entity
     /// </summary>
     public abstract class AuditEntity
     {
+        //主键
+        [SugarColumn(ColumnName = "id", IsPrimaryKey = true, IsIdentity = true, ColumnDescription = "主键")]
+        public long Id { get; set; }
+
         //创建时间
         [SugarColumn(ColumnName = "create_time", ColumnDataType = "datetime2(7)", ColumnDescription = "创建时间")]
         public DateTime CreateTime { get; set; } = DateTime.UtcNow;

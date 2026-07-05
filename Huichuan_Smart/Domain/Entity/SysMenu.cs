@@ -6,10 +6,6 @@ namespace Domain.Entity
     [SugarTable("sys_menu")]
     public class SysMenu : AuditEntity
     {
-        //主键
-        [SugarColumn(ColumnName = "id", IsPrimaryKey = true, IsIdentity = true, ColumnDescription = "主键")]
-        public long Id { get; set; }
-
         //菜单名称
         [SugarColumn(ColumnName = "menu_name", ColumnDataType = "nvarchar(50)", IsNullable = false, ColumnDescription = "菜单名称")]
         public string MenuName { get; set; } = string.Empty;

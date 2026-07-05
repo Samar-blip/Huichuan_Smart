@@ -6,10 +6,6 @@ namespace Domain.Entity
     [SugarTable("sys_user")]
     public class SysUser : AuditEntity
     {
-        //主键
-        [SugarColumn(ColumnName = "id", IsPrimaryKey = true, IsIdentity = true, ColumnDescription = "主键")]
-        public long Id { get; set; }
-
         //角色ID（关联 sys_role.id）
         [SugarColumn(ColumnName = "role_id", IsNullable = false, ColumnDescription = "角色ID，关联 sys_role.id")]
         public long RoleId { get; set; }

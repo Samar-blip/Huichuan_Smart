@@ -4,6 +4,8 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Text;
 
+
+
 namespace Application.CaptchaService
 {
     //图形验证码服务实现 — 使用 System.Drawing 生成 PNG 图片，验证码存入 IMemoryCache
@@ -52,9 +54,10 @@ namespace Application.CaptchaService
             if (string.IsNullOrWhiteSpace(captchaId) || string.IsNullOrWhiteSpace(userInput))
                 return false;
 
-            // 从缓存取出后立刻删除（一次性使用）
+            // 验证码过期（缓存中不存在）视为一次验证失败，返回 false
             if (_cache.TryGetValue(captchaId, out string? cachedCode))
             {
+                // 一次性消费：无论正确与否都删除
                 _cache.Remove(captchaId);
                 return string.Equals(cachedCode, userInput, StringComparison.OrdinalIgnoreCase);
             }
