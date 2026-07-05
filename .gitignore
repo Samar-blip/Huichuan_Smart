@@ -1,0 +1,37 @@
+# .NET 编译输出
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Visual Studio 缓存和配置
+.vs/
+.vscode/
+*.suo
+*.user
+*.slnx
+
+# NuGet 包
+packages/
+
+# SQL Server 文件
+*.mdf
+*.ldf
+*.bak
+
+# SVN 版本控制
+.svn/
+
+# IDE 文件
+*.opensnp
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+
+# 临时文件
+*.temp
+*.cache
