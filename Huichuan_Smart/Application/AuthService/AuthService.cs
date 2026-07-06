@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.AuthService
 {
-    //认证服务实现 — 密码登录、注册、修改密码
+    //认证服务实现 — 密码登录、修改密码
     public class AuthService : IAuthService
     {
         private readonly ISysUserRepository _userRepo;
@@ -205,41 +205,7 @@ namespace Application.AuthService
             return ChangePasswordResultDTO.Ok();
         }
 
-        //用户注册
-        public async Task<RegisterResultDTO> RegisterAsync(string userName, string password,
-            string confirmPassword, string? realName, string? phoneNumber, string? email, string captchaId, string captchaCode)
-        {
-            // 1. 验证图形验证码
-            if (!_captchaService.Validate(captchaId, captchaCode))
-                return RegisterResultDTO.Fail("验证码错误或已过期");
-
-            // 2. 检查用户名是否已存在
-            var existingUser = await _userRepo.GetByUserNameAsync(userName);
-            if (existingUser != null)
-                return RegisterResultDTO.Fail("该用户名已被注册");
-
-            // 检查两次密码是否一致
-            if (password != confirmPassword)
-                return RegisterResultDTO.Fail("两次输入的密码不一致");
-
-            // 创建新用户（审计字段由 SqlSugar 全局拦截器自动填充）
-            var user = new SysUser
-            {
-                UserName = userName,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
-                RealName = realName ?? "",
-                PhoneNumber = phoneNumber ?? "",
-                Email = email ?? "",
-                RoleId = 8,  // 默认角色：普通员工
-                Status = 0,
-                FailedLoginAttempts = 0,
-            };
-
-            await _userRepo.InsertAsync(user);
-
-            _logger.LogInformation("[注册] 用户 {UserName} 注册成功", userName);
-            return RegisterResultDTO.Ok();
-        }
+        //用户注册已移除
 
         //记录登录日志
         private async Task RecordLoginLog(string account, long userId,

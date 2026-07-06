@@ -9,7 +9,7 @@ using WebApplication1.Models;
 namespace WebApplication1.Controllers
 {
     /// <summary>
-    /// 认证控制器，提供登录、注册、改密、验证码等接口
+    /// 认证控制器，提供登录、改密、验证码等接口
     /// </summary>
     [ApiController]
     [Route("[controller]/[action]")]
@@ -69,25 +69,6 @@ namespace WebApplication1.Controllers
                 userName = result.UserName,
                 realName = result.RealName,
             });
-        }
-
-        /// <summary>
-        /// 用户注册
-        /// </summary>
-        /// <param name="request">注册请求体，包含用户名、密码、确认密码、验证码等</param>
-        /// <returns>成功返回提示信息；失败返回 400</returns>
-        [HttpPost()]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
-        {
-            var result = await _authService.RegisterAsync(
-                request.UserName, request.Password, request.ConfirmPassword,
-                request.RealName, request.PhoneNumber, request.Email,
-                request.CaptchaId, request.CaptchaCode);
-
-            if (!result.Success)
-                return BadRequest(new { message = result.Message });
-
-            return Ok(new { message = "注册成功，请登录" });
         }
 
         /// <summary>
